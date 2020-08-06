@@ -1,0 +1,21 @@
+body {
+    font: 14px "Century Gothic", Futura, sans-serif;
+    margin: 20px;
+  }
+
+.dollars-bank {
+    display: flex;
+    flex-direction: row;
+}
+  
+.dollars-bank-debug {
+    position: fixed;
+    top: 0;
+    right: 0;
+    border: 3px solid #942b8b;
+}
+
+.dollars-bank-main {
+    text-align: center;
+    border: 3px solid green;
+  }
