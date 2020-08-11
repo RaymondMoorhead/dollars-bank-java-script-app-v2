@@ -1,6 +1,7 @@
 const Account = require('./../../Data/Account.js');
 const State = require('./../State.js');
 const ConsoleExtras = require('./../../Utility/ConsoleExtras.js');
+const Utility = require('./../../Utility/Utility.js');
 
 class NewAccountState extends State{
 
@@ -19,23 +20,23 @@ class NewAccountState extends State{
 
 	run() {
         var input;
-		switch(subState) {
+		switch(this.subState) {
 			case 0:
 				input = this.askQuestion("Customer Name:" + ConsoleExtras.ANSI_GREEN);
-				this.newAcc.setName(input);
+				this.newAcc.name = input;
 				++this.subState;
 				this.write(ConsoleExtras.ANSI_RESET);
 				break;
 			case 1:
 				input = this.askQuestion("Customer Address:" + ConsoleExtras.ANSI_GREEN);
-				this.newAcc.setAddress(input);
+				this.newAcc.address = input;
 				++this.subState;
 				this.write(ConsoleExtras.ANSI_RESET);
 				break;
 			case 2:
 				input = this.askQuestion("Customer Contact Number:" + ConsoleExtras.ANSI_GREEN);
 				if(Account.validPhone(input)) {
-					this.newAcc.setContactNumber(input);
+					this.newAcc.contactNumber = input;
 					++this.subState;
 				}
 				else
@@ -44,8 +45,8 @@ class NewAccountState extends State{
 				break;
 			case 3:
 				input = this.askQuestion("User Id :" + ConsoleExtras.ANSI_GREEN);
-				if(DollarsBankDao.idIsUnique(input)) {
-					this.newAcc.setUserId(input);
+				if(this.controller.dao.idIsUnique(input)) {
+					this.newAcc.userId = input;
 					++this.subState;
 				}
 				else
@@ -60,13 +61,14 @@ class NewAccountState extends State{
 					++this.subState;
 				}
 				else
-                    this.write(ConsoleExtras.ANSI_RED + error + "\n");
+                    this.write(ConsoleExtras.ANSI_RED + this.error + "\n");
                 this.write(ConsoleExtras.ANSI_RESET);
 				break;
 			case 5:
-				input = this.askQuestion("Initial Deposite Amount:" + ConsoleExtras.ANSI_GREEN);
-				if(ConsoleExtras.validAmount(input)) {
-					this.newAcc.addAmount(ConsoleExtras.parseAmount(num), "Initial Balance");
+				input = this.askQuestion("Initial Deposit Amount:" + ConsoleExtras.ANSI_GREEN);
+				if(Utility.validAmount(input)) {
+					this.newAcc.addAmount(Utility.parseAmountToInt(input), "Initial Balance");
+					this.controller.dao.addAccount(this.newAcc);
 					this.controller.changeState("WelcomeCustomerState", this.newAcc);
 				}
 				else

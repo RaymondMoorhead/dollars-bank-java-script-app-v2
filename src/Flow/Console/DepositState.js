@@ -1,5 +1,6 @@
 const State = require('./../State.js');
-const Account = require('./../../Data/Account.js');
+const ConsoleExtras = require('./../../Utility/ConsoleExtras.js');
+const Utility = require('./../../Utility/Utility.js');
 
 class DepositState extends State {
 
@@ -17,19 +18,15 @@ class DepositState extends State {
 	}
 
 	run() {
-		num = this.askQuestion("Amount:" + ConsoleExtras.ANSI_GREEN);
-		if(ConsoleExtras.validAmount(num)) {
-			DollarsBankDao.deposit(acc, ConsoleExtras.parseAmount(num));
-			this.controller.changeState("WelcomeCustomerState", acc);
+		var num = this.askQuestion("Amount:" + ConsoleExtras.ANSI_GREEN);
+		if(Utility.validAmount(num)) {
+			this.controller.dao.deposit(this.account, Utility.parseAmountToInt(num));
+			this.controller.changeState("WelcomeCustomerState", this.account);
+			this.account = null;
 		}
 		else
-		write(ConsoleExtras.ANSI_RED + "Please Enter A Valid Amount");
-		write(ConsoleExtras.ANSI_RESET);
-	}
-
-	stop() {
-		input = null;
-		acc = null;
+		this.write(ConsoleExtras.ANSI_RED + "Please Enter A Valid Amount");
+		this.write(ConsoleExtras.ANSI_RESET);
 	}
 }
 

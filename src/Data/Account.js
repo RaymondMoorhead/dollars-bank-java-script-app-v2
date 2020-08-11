@@ -1,5 +1,5 @@
 const Queue = require('./../Utility/Queue.js');
-const utility = require('./../Utility/Utility.js');
+const Utility = require('./../Utility/Utility.js');
 const encrypt = require('./../Utility/Encrypt.js');
 
 class Account {
@@ -51,8 +51,12 @@ class Account {
 			return null;
 	}
 
+	correctPassword(password) {
+		return this.password.localeCompare(encrypt(password, this.userId)) === 0;
+	}
+
 	setPassword(password) {
-		this.password = encrypt(password, this.name);
+		this.password = encrypt(password, this.userId);
 	}
 	
 	addTransaction(message) {
@@ -62,15 +66,15 @@ class Account {
     }
 
     addAmount(amount, message) {
-		this.addTransaction("Added " + utility.parseAmountToString(amount) + " (" + message + ") [" + utility.getTime() + "]");
+		this.addTransaction("Added " + Utility.parseAmountToString(amount) + " (" + message + ") [" + Utility.getTime() + "]");
 		this.balance += amount;
     }
 
     subtractAmount(amount, message) {
 		if((this.balance - amount) <= -1)
-			this.addTransaction("ERROR - Attempted Negative Result Transaction " + utility.parseAmountToString(amount) + " (" + message + ") [" + utility.getTime() + "]");
+			this.addTransaction("ERROR - Attempted Negative Result Transaction " + Utility.parseAmountToString(amount) + " (" + message + ") [" + Utility.getTime() + "]");
 		else {
-			this.addTransaction("Removed " + utility.parseAmountToString(amount) + " (" + message + ") [" + utility.getTime() + "]");
+			this.addTransaction("Removed " + Utility.parseAmountToString(amount) + " (" + message + ") [" + Utility.getTime() + "]");
 			this.balance -= amount;
 		}
     }

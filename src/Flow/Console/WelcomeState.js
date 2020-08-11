@@ -18,15 +18,12 @@ class WelcomeState extends State{
 	}
 
 	run() {
-		var message = "Bad Message";
-		message = this.askQuestion("Please enter a number 1 - 5");
-		this.write("Received Input: \"" + message + "\"");
-        var input;
-        input = parseInt(message);
+		var input = this.askQuestion("Please enter a number 1 - 3");
+        input = parseInt(input);
         if(isNaN(input))
             return;
 
-		switch(selection) {
+		switch(input) {
 			case 1:
 				this.controller.changeState("NewAccountState");
 				break;

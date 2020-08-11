@@ -8,27 +8,27 @@ class DollarsBankDao {
     }
 	
 	idExists(id) {
-		return this.accounts.containsKey(id);
+		return this.accounts.has(id);
 	}
 	
 	idIsUnique(id) {
-		return !this.accounts.containsKey(id);
+		return !this.accounts.has(id);
 	}
 	
 	addAccount(account) {
-		if(this.accounts.containsKey(account.getUserId()))
+		if(this.accounts.has(account.userId))
 			return false;
-		accounts.put(account.getUserId(), account);
+		this.accounts.set(account.userId, account);
 		return true;
 	}
 	
 	getAccount(userId, password) {
-		account = this.accounts.get(userId);
+		var account = this.accounts.get(userId);
 		
 		if((account != null) && (account.correctPassword(password)))
 			return account;
 		
-		error = "Invalid Credentials";
+		this.error = "Invalid Credentials";
 		return null;
 	}
 	
@@ -37,7 +37,7 @@ class DollarsBankDao {
 	}
 	
 	withdraw(acc, amount) {
-		if(validateTransaction(acc, amount)) {
+		if(this.validateTransaction(acc, amount)) {
 			acc.subtractAmount(amount, "local withdrawal");
 			return true;
 		}
@@ -45,34 +45,34 @@ class DollarsBankDao {
 	}
 	
 	transferToId(from, toId, amount) {
-		return this.transfer(from, accounts.get(toId), amount);
+		return this.transfer(from, this.accounts.get(toId), amount);
 	}
 	
 	transfer(from, to, amount) {
-		if(validateTransaction(from, amount)) {
+		if(this.validateTransaction(from, amount)) {
 			if(to == null)
             this.error = "Target Account Does Not Exist";
 			else {
-				from.subtractAmount(amount, "transfer to " + to.getUserId().toString());
-				to.addAmount(amount, "transfer from " + from.getUserId().toString());
+				from.subtractAmount(amount, "transfer to " + to.userId);
+				to.addAmount(amount, "transfer from " + from.userId);
 				return true;
 			}
 		}
 		else
-			error = "Source Account Does Not Have Sufficient Funds";
+			this.error = "Source Account Does Not Have Sufficient Funds";
 		return false;
 	}
 	
 	getError() {
-		temp = error;
+		var temp = this.error;
 		this.error = null;
 		return temp;
 	}
 	
 	validateTransaction(account, amount) {
 		
-		if(account.getBalance() < amount) {
-			this.error = account.getUserId() + " does not have sufficient funds";
+		if(account.balance < amount) {
+			this.error = account.userId + " does not have sufficient funds";
 			return false;
 		}
 		return true;

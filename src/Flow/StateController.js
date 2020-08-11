@@ -32,10 +32,6 @@ class StateController {
 		state.controller = this;
 	}
 	
-	changeState(name) {
-		this.nextState = this.states.get(name);
-	}
-	
 	changeState(name, passData) {
 		this.passedData = passData;
 		this.nextState = this.states.get(name);
@@ -55,9 +51,9 @@ class StateController {
 		while (this.running) {
 			this.curState.run();
 			if(this.nextState != null) {
-				this.curState = nextState;
+				this.curState = this.nextState;
 				this.nextState = null;
-				this.curState.start(passedData);
+				this.curState.start(this.passedData);
 				this.passedData = null;
 			}
 		}
