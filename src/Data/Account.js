@@ -1,6 +1,6 @@
-import Queue from "../Utility/Queue.js";
-import * as utility from "../Utility/Utility.js";
-import encrypt from '../Utility/Encrypt.js';
+const Queue = require('./../Utility/Queue.js');
+const utility = require('./../Utility/Utility.js');
+const encrypt = require('./../Utility/Encrypt.js');
 
 class Account {
 
@@ -76,4 +76,4 @@ class Account {
     }
 }
 
-export default Account;
+module.exports = Account;

@@ -41,4 +41,4 @@ function getTime() {
 	return (new Date()).toString();
 }
 
-export {validAmount, parseAmountToInt, parseAmountToString, getTime};
+module.exports = {validAmount, parseAmountToInt, parseAmountToString, getTime};

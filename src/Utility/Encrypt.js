@@ -87,4 +87,4 @@ function toHash(c) {
 }
 
 // EXPORT
-export default encrypt;
+module.exports = encrypt;

@@ -1,47 +1,67 @@
+//const prompt = require('prompt');
+const prompt = require('prompt-sync')();
+const DollarsBankDao = require('./../Data/DollarsBankDao.js');
+
 class StateController {
 
-	StateController() {
-        this.states = new Map();
+	constructor() {
+		this.states = new Map();
+		this.dao = new DollarsBankDao();
         this.running = true;
         this.curState = null;
         this.nextState = null;
-        this.passedData = null;
+		this.passedData = null;
+		//prompt.start();
+	}
+
+	askQuestion(query) {
+		var trueResult;// = new Promise((resolve) => {resolve()});
+		// console.log("Just before prompt.get with trueResult " + trueResult);
+		// prompt.get(query, function(result) {
+		// 	trueResult( () => {
+		// 		result[query]
+		// 	})
+		// });
+		// console.log("Just after prompt.get with trueResult " + trueResult);
+		console.log(query);
+		return prompt();
 	}
 	
 	addState(state) {
-		states.put(state.getName(), state);
+		this.states.set(state.getName(), state);
 		state.controller = this;
 	}
 	
 	changeState(name) {
-		nextState = states.get(name);
+		this.nextState = this.states.get(name);
 	}
 	
 	changeState(name, passData) {
-		passedData = passData;
-		nextState = states.get(name);
+		this.passedData = passData;
+		this.nextState = this.states.get(name);
 	}
 	
 	start(startStateName) {
-		curState = states.get(startStateName);
-		curState.start(null);
-		run();
+		this.curState = this.states.get(startStateName);
+		this.curState.start(null);
+		this.run();
 	}
 	
 	shutdown() {
-		running = false;
+		this.running = false;
 	}
 	
 	run() {
-		while(running) {
-			curState.run();
-			if(nextState != null) {
-				curState.stop();
-				curState = nextState;
-				nextState = null;
-				curState.start(passedData);
-				passedData = null;
+		while (this.running) {
+			this.curState.run();
+			if(this.nextState != null) {
+				this.curState = nextState;
+				this.nextState = null;
+				this.curState.start(passedData);
+				this.passedData = null;
 			}
 		}
 	}
 }
+
+module.exports = StateController;
